@@ -17,6 +17,7 @@ namespace stickman {
     class DemoWindow final : public yuanGL::YuanWindow {
 
     public:
+        DemoWindow(const char* title);
         DemoWindow(int width, int height, const char* title);
         ~DemoWindow();
 
@@ -24,6 +25,8 @@ namespace stickman {
 
         virtual void inloop() override;
         virtual void resize(int width, int height) override;
+
+        void before_draw();
 
     private:
 

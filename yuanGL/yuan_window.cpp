@@ -27,21 +27,32 @@ namespace yuanGL {
 
 bool yuanGL::YuanWindow::_is_glfw_init = false;
 
-yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title)
+yuanGL::YuanWindow::YuanWindow(const char* title) :
+	_projection(new Matrix())
+{
+	before_create();
+	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+	_window = glfwCreateWindow(300, 200, title, NULL, NULL);
+	init_window_glew();
+	maximize();
+	glfwShowWindow(_window);
+}
+
+yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title) :
+	_projection(new Matrix())
 {
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, NULL);
 	init_window_glew();
-	_projection = new Matrix();
 	resize_update_projection(width, height);
 }
 
-yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share)
+yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share) :
+	_projection(new Matrix())
 {
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, share);
 	init_window_glew();
-	_projection = new Matrix();
 	resize_update_projection(width, height);
 }
 
@@ -72,9 +83,9 @@ void yuanGL::YuanWindow::start_loop()
 	}
 }
 
-void yuanGL::YuanWindow::make_current() const
+void yuanGL::YuanWindow::maximize()
 {
-	glfwMakeContextCurrent(_window);
+	glfwMaximizeWindow(_window);
 }
 
 void yuanGL::YuanWindow::swap_buffers() const
@@ -163,7 +174,7 @@ void yuanGL::YuanWindow::init_window_glew()
 
 	hashWindow[_window] = this;
 
-	make_current();
+	glfwMakeContextCurrent(_window);
 
 	if (glewInit() != GLEW_OK) {
 		__debugbreak();

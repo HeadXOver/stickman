@@ -6,7 +6,7 @@
 #include <vertex_attribution.h>
 #include <shader.h>
 #include <texture.h>
-#include <matrix.h>
+#include <yuan_matrix.h>
 
 #include <iostream>
 
@@ -29,34 +29,16 @@ namespace {
 
 }
 
+stickman::DemoWindow::DemoWindow(const char* title) :
+    yuanGL::YuanWindow(title)
+{
+    before_draw();
+}
+
 stickman::DemoWindow::DemoWindow(int width, int height, const char* title) :
     yuanGL::YuanWindow(width, height, title)
 {
-    _vao = new yuanGL::VertexArray();
-    _vbo = new yuanGL::VertexBuffer(vertices, 16);
-    _ebo = new yuanGL::ElementBuffer(indices, 6);
-
-    {
-        yuanGL::VertexAttribution vertexAttribution({
-            yuanGL::Vertex(2,4,0),
-            yuanGL::Vertex(2,4,2),
-            });
-
-        _vao->attach_buffer(_vbo, vertexAttribution);
-    }
-
-    _vao->attach_element_buffer(_ebo);
-
-    _shader = new yuanGL::Shader("shader.shader");
-
-    _vao->bind();
-
-    _texture = new yuanGL::Texture("image/7.png");
-    _texture->bind();
-
-    _shader->set_uniform_mat4("uMvp", matrix_p());
-    _shader->set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
-    _shader->set_uniform_i("uTexture", 0);
+    before_draw();
 }
 
 stickman::DemoWindow::~DemoWindow()
@@ -85,4 +67,33 @@ void stickman::DemoWindow::inloop()
 
 void stickman::DemoWindow::resize(int width, int height)
 {
+}
+
+void stickman::DemoWindow::before_draw()
+{
+    _vao = new yuanGL::VertexArray();
+    _vbo = new yuanGL::VertexBuffer(vertices, 16);
+    _ebo = new yuanGL::ElementBuffer(indices, 6);
+
+    {
+        yuanGL::VertexAttribution vertexAttribution({
+            yuanGL::Vertex(2,4,0),
+            yuanGL::Vertex(2,4,2),
+            });
+
+        _vao->attach_buffer(_vbo, vertexAttribution);
+    }
+
+    _vao->attach_element_buffer(_ebo);
+
+    _shader = new yuanGL::Shader("shader.shader");
+
+    _vao->bind();
+
+    _texture = new yuanGL::Texture("image/7.png");
+    _texture->bind();
+
+    _shader->set_uniform_mat4("uMvp", matrix_p());
+    _shader->set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
+    _shader->set_uniform_i("uTexture", 0);
 }

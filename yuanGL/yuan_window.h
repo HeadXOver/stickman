@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <unordered_map>
-
 struct GLFWwindow;
 
 namespace yuanGL {
@@ -17,6 +15,7 @@ namespace yuanGL {
 
 	public:
 
+		YuanWindow(const char* title = "untitled");
 		YuanWindow(int width, int height, const char* title);
 		YuanWindow(int width, int height, const char* title, GLFWwindow* share);
 
@@ -32,7 +31,8 @@ namespace yuanGL {
 	public:
 
 		void start_loop();
-		void make_current() const;
+
+		void maximize();
 		void swap_buffers() const;
 		void print_gl_version() const;
 		void set_swap_interval(bool v) const;

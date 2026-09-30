@@ -150,6 +150,7 @@
     <ClInclude Include="vertex_buffer.h" />
     <ClInclude Include="yuanGL.h" />
     <ClInclude Include="yuan_enum.h" />
+    <ClInclude Include="yuan_matrix.h" />
     <ClInclude Include="yuan_window.h" />
   </ItemGroup>
   <ItemGroup>

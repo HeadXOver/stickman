@@ -61,7 +61,7 @@ void yuanGL::Shader::set_uniform_mat4(const char* name, const float* value)
 void yuanGL::Shader::set_uniform_mat4(const char* name, const Matrix& m)
 {
 	bind();
-	GLCall(glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, &m[0][0]));
+	GLCall(glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, m.data()));
 }
 
 int yuanGL::Shader::get_uniform_location(const char* name) const
