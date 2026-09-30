@@ -32,7 +32,7 @@ yuanGL::YuanWindow::YuanWindow(const char* title) :
 {
 	before_create();
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-	_window = glfwCreateWindow(300, 200, title, NULL, NULL);
+	_window = glfwCreateWindow(1080, 720, title, NULL, NULL);
 	init_window_glew();
 	maximize();
 	glfwShowWindow(_window);
@@ -83,6 +83,48 @@ void yuanGL::YuanWindow::start_loop()
 	}
 }
 
+void yuanGL::YuanWindow::start_loop_fps(int fps)
+{
+	const float deltaTime = 1.0f / fps;
+
+	glfwSwapInterval(0);
+
+	while (!should_close())
+	{
+		double frameStart = glfwGetTime();
+
+		clear();
+
+		inloop();
+
+		swap_buffers();
+
+		/* Poll for and process events */
+		glfwPollEvents();
+
+		double frameEnd = glfwGetTime();
+		double elapsed = frameEnd - frameStart;
+		double remaining = deltaTime - elapsed;
+
+		if (remaining > 0.0)
+		{
+			// 先 sleep 掉大部分时间，降低 CPU 占用
+			if (remaining > 0.002)
+			{
+				std::this_thread::sleep_for(
+					std::chrono::duration<double>(remaining - 0.002)
+				);
+			}
+
+			// 最后 2ms 左右忙等，提高精度
+			while (glfwGetTime() - frameStart < deltaTime)
+			{
+				// 空转等待
+			}
+		}
+	}
+}
+
 void yuanGL::YuanWindow::maximize()
 {
 	glfwMaximizeWindow(_window);
@@ -101,11 +143,6 @@ void yuanGL::YuanWindow::print_gl_version() const
 void yuanGL::YuanWindow::set_swap_interval(bool v) const
 {
 	glfwSwapInterval(v ? 1 : 0);
-}
-
-void yuanGL::YuanWindow::set_fps_limit(int limit)
-{
-	glfwSwapInterval(0);
 }
 
 void yuanGL::YuanWindow::clear() const

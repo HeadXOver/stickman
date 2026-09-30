@@ -11,10 +11,9 @@ int main(void)
     {
         stickman::DemoWindow window("stickman");
         window.maximize();
-        window.print_gl_version();
         window.set_swap_interval(true);
         window.set_clear_color(0.f, 0.3f, 0.8f, 1.0f);
-        window.start_loop();
+        window.start_loop_fps(120);
     }
 
     yuanGL::YuanWindow::terminate();

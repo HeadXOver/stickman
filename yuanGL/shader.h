@@ -1,5 +1,8 @@
 #pragma once
 
+#include <unordered_map>
+#include <string>
+
 namespace yuanGL {
 
 	class Matrix;
@@ -18,10 +21,12 @@ namespace yuanGL {
 		void set_uniform_mat4(const char* name, const float* value);
 		void set_uniform_mat4(const char* name, const Matrix& m);
 
-		int get_uniform_location(const char* name) const;
+		int get_uniform_location(const char* name);
 
 	private:
 		unsigned int _id;
+
+		std::unordered_map<std::string, int> _uniform_locations;
 	};
 
 }

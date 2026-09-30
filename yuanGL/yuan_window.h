@@ -31,12 +31,12 @@ namespace yuanGL {
 	public:
 
 		void start_loop();
+		void start_loop_fps(int fps);
 
 		void maximize();
 		void swap_buffers() const;
 		void print_gl_version() const;
 		void set_swap_interval(bool v) const;
-		void set_fps_limit(int limit);
 		void clear() const;
 		void use_3_3_core() const;
 		void set_clear_color(float r, float g, float b, float a) const;
