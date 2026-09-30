@@ -4,42 +4,48 @@
 #include "gl_call.h"
 #include "matrix.h"
 
-void yuanGL::YuanWindow::initWindow(int width, int height, const char* title)
+bool yuanGL::YuanWindow::_is_glfw_init = false;
+
+yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title)
 {
-	use_3_3_core();
+	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, NULL);
 	init_window_glew();
 	_projection = new Matrix(MatrixType::Ortho, 0.f, 960.f, 0.f, 540.f);
 }
 
-void yuanGL::YuanWindow::initWindow(int width, int height, const char* title, GLFWwindow* share)
+yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share)
 {
-	use_3_3_core();
+	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, share);
 	init_window_glew();
 	_projection = new Matrix(MatrixType::Ortho, 0.f, 960.f, 0.f, 540.f);
 }
 
-yuanGL::YuanWindow& yuanGL::YuanWindow::ins()
-{
-	static YuanWindow window;
-	return window;
-}
-
-yuanGL::YuanWindow::YuanWindow()
-{
-	if (!glfwInit()) {
-		std::cout << "Failed to initialize GLFW" << std::endl;
-		__debugbreak();
-		exit(EXIT_FAILURE);
-	}
-}
-
 yuanGL::YuanWindow::~YuanWindow()
 {
 	glfwDestroyWindow(_window);
-	glfwTerminate();
 	delete _projection;
+}
+
+void yuanGL::YuanWindow::terminate()
+{
+	glfwTerminate();
+}
+
+void yuanGL::YuanWindow::start_loop(LoopFunc func)
+{
+	while (!should_close())
+	{
+		clear();
+
+		func();
+
+		swap_buffers();
+
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
 }
 
 void yuanGL::YuanWindow::make_current() const
@@ -106,6 +112,21 @@ bool yuanGL::YuanWindow::operator!() const {
 const yuanGL::Matrix& yuanGL::YuanWindow::matrix_p() const
 {
 	return *_projection;
+}
+
+void yuanGL::YuanWindow::before_create()
+{
+	if (!_is_glfw_init) {
+		if (!glfwInit()) {
+			std::cout << "Failed to initialize GLFW" << std::endl;
+			__debugbreak();
+			exit(EXIT_FAILURE);
+		}
+
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	}
 }
 
 void yuanGL::YuanWindow::init_window_glew()

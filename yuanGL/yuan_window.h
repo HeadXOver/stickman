@@ -2,29 +2,28 @@
 
 struct GLFWwindow;
 
+using LoopFunc = void(*)();
+
 namespace yuanGL {
 
 	class Matrix;
 
 	class YuanWindow {
 
-	private:
-
-		YuanWindow();
-		~YuanWindow();
-
 	public:
 
-		void initWindow(int width, int height, const char* title);
-		void initWindow(int width, int height, const char* title, GLFWwindow* share);
+		YuanWindow(int width, int height, const char* title);
+		YuanWindow(int width, int height, const char* title, GLFWwindow* share);
+		~YuanWindow();
 
 		YuanWindow& operator=(const YuanWindow& other) = delete;
 		YuanWindow(const YuanWindow& other) = delete;
 
-		static YuanWindow& ins();
+		static void terminate();
 
 	public:
 
+		void start_loop(LoopFunc func);
 		void make_current() const;
 		void swap_buffers() const;
 		void print_gl_version() const;
@@ -44,12 +43,16 @@ namespace yuanGL {
 
 	private:
 
+		static void before_create();
+
 		void init_window_glew();
 
 	private:
 		GLFWwindow* _window{ nullptr };
 
 		Matrix* _projection{ nullptr };
+
+		static bool _is_glfw_init;
 	};
 
 }

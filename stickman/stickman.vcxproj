@@ -133,6 +133,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="demo_window.h" />
     <ClInclude Include="global_gl_func.h" />
   </ItemGroup>
   <ItemGroup>

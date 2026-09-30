@@ -15,6 +15,8 @@
 
 #pragma region [variales]
 
+yuanGL::YuanWindow* pWindow = nullptr;
+
 float vertices[] = {
     20.f, 20.f, 0.f, 0.f,
     940.f, 520.f, 1.f, 1.f,
@@ -32,58 +34,57 @@ float diff = 0.05f;
 
 #pragma endregion
 
+void update()
+{
+    if (howRed > 1.f)
+        diff = -0.05f;
+    else if (howRed < 0.f)
+        diff = 0.05f;
+
+    howRed += diff;
+
+    pWindow->draw_triangles_by_elements(6);
+}
+
 int main(void)
 {
-    yuanGL::YuanWindow& window = yuanGL::YuanWindow::ins();
-
-    window.initWindow(960, 540, "stickman");
-    window.print_gl_version();
-    window.set_swap_interval(true);
-    yuanGL::VertexArray vertexArray;
-    yuanGL::VertexBuffer buffer(vertices, 16);
-    yuanGL::ElementBuffer idBuffer(indices, 6);
-
     {
-        yuanGL::VertexAttribution vertexAttribution({
-            yuanGL::Vertex(2,4,0),
-            yuanGL::Vertex(2,4,2),
-            });
+        yuanGL::YuanWindow window(960, 540, "stickman");
 
-        vertexArray.attach_buffer(buffer, vertexAttribution);
-    }
+        pWindow = &window;
 
-    vertexArray.attach_element_buffer(idBuffer);
+        window.print_gl_version();
+        window.set_swap_interval(true);
+        yuanGL::VertexArray vertexArray;
+        yuanGL::VertexBuffer buffer(vertices, 16);
+        yuanGL::ElementBuffer idBuffer(indices, 6);
 
-    yuanGL::Shader shader("shader.shader");
+        {
+            yuanGL::VertexAttribution vertexAttribution({
+                yuanGL::Vertex(2,4,0),
+                yuanGL::Vertex(2,4,2),
+                });
 
-    window.set_clear_color(howRed, 0.3f, 0.8f, 1.0f);
+            vertexArray.attach_buffer(buffer, vertexAttribution);
+        }
 
-    vertexArray.bind();
+        vertexArray.attach_element_buffer(idBuffer);
 
-    yuanGL::Texture texture("image/7.png");
-    texture.bind();
-    
-    shader.set_uniform_mat4("uMvp", window.matrix_p());
+        yuanGL::Shader shader("shader.shader");
 
-    while (!window.should_close())
-    {
-        window.clear();
+        window.set_clear_color(howRed, 0.3f, 0.8f, 1.0f);
 
-        if (howRed > 1.f)
-            diff = -0.05f;
-        else if (howRed < 0.f)
-            diff = 0.05f;
+        vertexArray.bind();
 
-        howRed += diff;
+        yuanGL::Texture texture("image/7.png");
+        texture.bind();
 
+        shader.set_uniform_mat4("uMvp", window.matrix_p());
         shader.set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
         shader.set_uniform_i("uTexture", 0);
 
-        window.draw_triangles_by_elements(6);
-
-        window.swap_buffers();
-
-        /* Poll for and process events */
-        glfwPollEvents();
+        window.start_loop(update);
     }
+
+    yuanGL::YuanWindow::terminate();
 }
