@@ -24,6 +24,8 @@ namespace yuanGL {
 		Matrix(MatrixType type, float f1, float f2, float f3, float f4);
 		Matrix(MatrixType type, float f1, float f2, float f3, float f4, float f5, float f6);
 
+		void set_to_orth(float left, float right, float bottom, float top);
+
 	private:
 
 		MatrixType _type = MatrixType::None;

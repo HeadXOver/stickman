@@ -6,9 +6,14 @@ struct GLFWwindow;
 
 namespace yuanGL {
 
+	class YuanWindow;
 	class Matrix;
 
+	using ResizeFunc = void (YuanWindow::*)(int, int);
+
 	class YuanWindow {
+
+		friend void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 	public:
 
@@ -35,6 +40,7 @@ namespace yuanGL {
 		void clear() const;
 		void use_3_3_core() const;
 		void set_clear_color(float r, float g, float b, float a) const;
+		void set_center_square(float square) noexcept { _center_square = square; }
 
 		static void draw_triangles_by_elements(const void* data, int count);
 		static void draw_triangles_by_elements(int count);
@@ -54,15 +60,16 @@ namespace yuanGL {
 		static void before_create();
 
 		void init_window_glew();
+		void resize_update_projection(int width, int height);
 
 	private:
 		GLFWwindow* _window{ nullptr };
 
 		Matrix* _projection{ nullptr };
 
-		static bool _is_glfw_init;
+		float _center_square{ 1000.0f };
 
-		static std::unordered_map<GLFWwindow*, YuanWindow*> _hash_window;
+		static bool _is_glfw_init;
 	};
 
 }

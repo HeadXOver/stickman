@@ -4,16 +4,36 @@
 #include "gl_call.h"
 #include "matrix.h"
 
-bool yuanGL::YuanWindow::_is_glfw_init = false;
+namespace {
 
-std::unordered_map<GLFWwindow*, yuanGL::YuanWindow*> yuanGL::YuanWindow::_hash_window;
+	std::unordered_map<GLFWwindow*, yuanGL::YuanWindow*> hashWindow;
+
+}
+
+namespace yuanGL {
+
+	void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+	{
+		glViewport(0, 0, width, height);
+
+		auto findWindow = hashWindow.find(window);
+		if (findWindow != hashWindow.end()) {
+			findWindow->second->resize(width, height);
+			findWindow->second->resize_update_projection(width, height);
+		}
+	}
+
+}
+
+bool yuanGL::YuanWindow::_is_glfw_init = false;
 
 yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title)
 {
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, NULL);
 	init_window_glew();
-	_projection = new Matrix(MatrixType::Ortho, 0.f, (float)width, 0.f, (float)height);
+	_projection = new Matrix();
+	resize_update_projection(width, height);
 }
 
 yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share)
@@ -21,14 +41,15 @@ yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwin
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, share);
 	init_window_glew();
-	_projection = new Matrix(MatrixType::Ortho, 0.f, (float)width, 0.f, (float)height);
+	_projection = new Matrix();
+	resize_update_projection(width, height);
 }
 
 yuanGL::YuanWindow::~YuanWindow()
 {
 	glfwDestroyWindow(_window);
 	delete _projection;
-	_hash_window.erase(_window);
+	hashWindow.erase(_window);
 }
 
 void yuanGL::YuanWindow::terminate()
@@ -126,6 +147,8 @@ void yuanGL::YuanWindow::before_create()
 			exit(EXIT_FAILURE);
 		}
 
+		_is_glfw_init = true;
+
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -138,7 +161,7 @@ void yuanGL::YuanWindow::init_window_glew()
 		__debugbreak();
 	}
 
-	_hash_window[_window] = this;
+	hashWindow[_window] = this;
 
 	make_current();
 
@@ -148,4 +171,21 @@ void yuanGL::YuanWindow::init_window_glew()
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+	glfwSetFramebufferSizeCallback(_window, framebufferSizeCallback);
+}
+
+void yuanGL::YuanWindow::resize_update_projection(int width, int height)
+{
+	if (width > height) {
+		const float over = ((width - height) >> 1) * _center_square / height;
+		_projection->set_to_orth(-over, _center_square + over, 0.f, _center_square);
+	}
+	else if (width < height) {
+		const float over = ((height - width) >> 1) * _center_square / width;
+		_projection->set_to_orth(0.f, _center_square, -over, _center_square + over);
+	}
+	else {
+		_projection->set_to_orth(0.f, _center_square, 0.f, _center_square);
+	}
 }

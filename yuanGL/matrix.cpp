@@ -46,3 +46,8 @@ yuanGL::Matrix::Matrix(MatrixType type, float f1, float f2, float f3, float f4, 
 		__debugbreak();
 	}
 }
+
+void yuanGL::Matrix::set_to_orth(float left, float right, float bottom, float top)
+{
+	*this = glm::ortho(left, right, bottom, top, -1.f, 1.f);
+}

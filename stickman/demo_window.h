@@ -23,6 +23,7 @@ namespace stickman {
     private:
 
         virtual void inloop() override;
+        virtual void resize(int width, int height) override;
 
     private:
 

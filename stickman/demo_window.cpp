@@ -8,13 +8,15 @@
 #include <texture.h>
 #include <matrix.h>
 
+#include <iostream>
+
 namespace {
 
     float vertices[] = {
     20.f, 20.f, 0.f, 0.f,
-    940.f, 520.f, 1.f, 1.f,
-    940.f, 20.f, 1.f, 0.f,
-    20.f, 520.f, 0.f, 1.f
+    980.f, 980.f, 1.f, 1.f,
+    980.f, 20.f, 1.f, 0.f,
+    20.f, 980.f, 0.f, 1.f
     };
 
     unsigned int indices[] = {
@@ -76,6 +78,11 @@ void stickman::DemoWindow::inloop()
     howRed += diff;
 
     _shader->set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
+    _shader->set_uniform_mat4("uMvp", matrix_p());
 
     draw_triangles_by_elements(6);
+}
+
+void stickman::DemoWindow::resize(int width, int height)
+{
 }
