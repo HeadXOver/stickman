@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <unordered_map>
+
 struct GLFWwindow;
 
 namespace yuanGL {
@@ -12,12 +14,15 @@ namespace yuanGL {
 
 		YuanWindow(int width, int height, const char* title);
 		YuanWindow(int width, int height, const char* title, GLFWwindow* share);
-		virtual ~YuanWindow();
 
 		YuanWindow& operator=(const YuanWindow& other) = delete;
 		YuanWindow(const YuanWindow& other) = delete;
 
 		static void terminate();
+
+	protected:
+
+		~YuanWindow();
 
 	public:
 
@@ -42,6 +47,7 @@ namespace yuanGL {
 	protected:
 
 		virtual void inloop() = 0;
+		virtual void resize(int width, int height) {}
 
 	private:
 
@@ -55,6 +61,8 @@ namespace yuanGL {
 		Matrix* _projection{ nullptr };
 
 		static bool _is_glfw_init;
+
+		static std::unordered_map<GLFWwindow*, YuanWindow*> _hash_window;
 	};
 
 }

@@ -6,6 +6,8 @@
 
 bool yuanGL::YuanWindow::_is_glfw_init = false;
 
+std::unordered_map<GLFWwindow*, yuanGL::YuanWindow*> yuanGL::YuanWindow::_hash_window;
+
 yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title)
 {
 	before_create();
@@ -26,6 +28,7 @@ yuanGL::YuanWindow::~YuanWindow()
 {
 	glfwDestroyWindow(_window);
 	delete _projection;
+	_hash_window.erase(_window);
 }
 
 void yuanGL::YuanWindow::terminate()
@@ -134,6 +137,8 @@ void yuanGL::YuanWindow::init_window_glew()
 	if (!_window) {
 		__debugbreak();
 	}
+
+	_hash_window[_window] = this;
 
 	make_current();
 

@@ -75,5 +75,7 @@ void stickman::DemoWindow::inloop()
 
     howRed += diff;
 
+    _shader->set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
+
     draw_triangles_by_elements(6);
 }
