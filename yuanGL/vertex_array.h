@@ -14,7 +14,9 @@ namespace yuanGL {
 		~VertexArray();
 
 		void attach_buffer(const VertexBuffer& vb, const VertexAttribution& attribution);
+		void attach_buffer(const VertexBuffer* vb, const VertexAttribution& attribution);
 		void attach_element_buffer(const ElementBuffer& eb);
+		void attach_element_buffer(const ElementBuffer* eb);
 
 		void bind() const;
 		void unbind() const;

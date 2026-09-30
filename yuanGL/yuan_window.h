@@ -2,8 +2,6 @@
 
 struct GLFWwindow;
 
-using LoopFunc = void(*)();
-
 namespace yuanGL {
 
 	class Matrix;
@@ -14,7 +12,7 @@ namespace yuanGL {
 
 		YuanWindow(int width, int height, const char* title);
 		YuanWindow(int width, int height, const char* title, GLFWwindow* share);
-		~YuanWindow();
+		virtual ~YuanWindow();
 
 		YuanWindow& operator=(const YuanWindow& other) = delete;
 		YuanWindow(const YuanWindow& other) = delete;
@@ -23,7 +21,7 @@ namespace yuanGL {
 
 	public:
 
-		void start_loop(LoopFunc func);
+		void start_loop();
 		void make_current() const;
 		void swap_buffers() const;
 		void print_gl_version() const;
@@ -40,6 +38,10 @@ namespace yuanGL {
 		bool operator!() const;
 
 		const Matrix& matrix_p() const;
+
+	protected:
+
+		virtual void inloop() = 0;
 
 	private:
 

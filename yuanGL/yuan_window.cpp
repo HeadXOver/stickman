@@ -11,7 +11,7 @@ yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title)
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, NULL);
 	init_window_glew();
-	_projection = new Matrix(MatrixType::Ortho, 0.f, 960.f, 0.f, 540.f);
+	_projection = new Matrix(MatrixType::Ortho, 0.f, (float)width, 0.f, (float)height);
 }
 
 yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share)
@@ -19,7 +19,7 @@ yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwin
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, share);
 	init_window_glew();
-	_projection = new Matrix(MatrixType::Ortho, 0.f, 960.f, 0.f, 540.f);
+	_projection = new Matrix(MatrixType::Ortho, 0.f, (float)width, 0.f, (float)height);
 }
 
 yuanGL::YuanWindow::~YuanWindow()
@@ -33,13 +33,13 @@ void yuanGL::YuanWindow::terminate()
 	glfwTerminate();
 }
 
-void yuanGL::YuanWindow::start_loop(LoopFunc func)
+void yuanGL::YuanWindow::start_loop()
 {
 	while (!should_close())
 	{
 		clear();
 
-		func();
+		inloop();
 
 		swap_buffers();
 

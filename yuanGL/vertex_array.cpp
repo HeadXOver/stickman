@@ -25,6 +25,16 @@ void yuanGL::VertexArray::attach_buffer(const VertexBuffer& vb, const VertexAttr
     this->unbind();
     vb.unbind();
 }
+
+void yuanGL::VertexArray::attach_buffer(const VertexBuffer* vb, const VertexAttribution& attribution)
+{
+    this->bind();
+    vb->bind();
+    attribution.enable();
+    this->unbind();
+    vb->unbind();
+}
+
 void yuanGL::VertexArray::attach_element_buffer(const ElementBuffer& eb)
 {
     this->bind();
@@ -32,6 +42,15 @@ void yuanGL::VertexArray::attach_element_buffer(const ElementBuffer& eb)
     this->unbind();
     eb.unbind();
 }
+
+void yuanGL::VertexArray::attach_element_buffer(const ElementBuffer* eb)
+{
+    this->bind();
+    eb->bind();
+    this->unbind();
+    eb->unbind();
+}
+
 void yuanGL::VertexArray::bind() const
 {
     GLCall(glBindVertexArray(_id));
