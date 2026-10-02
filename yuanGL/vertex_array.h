@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace yuanGL {
 
 	class VertexBuffer;
@@ -13,9 +15,8 @@ namespace yuanGL {
 		VertexArray();
 		~VertexArray();
 
-		void attach_buffer(const VertexBuffer& vb, const VertexAttribution& attribution);
 		void attach_buffer(const VertexBuffer* vb, const VertexAttribution& attribution);
-		void attach_element_buffer(const ElementBuffer& eb);
+		void attach_buffer(const VertexBuffer* vb, const std::vector<int>& attribution);
 		void attach_element_buffer(const ElementBuffer* eb);
 
 		void bind() const;

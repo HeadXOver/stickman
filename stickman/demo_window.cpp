@@ -75,14 +75,7 @@ void stickman::DemoWindow::before_draw()
     _vbo = new yuanGL::VertexBuffer(vertices, 16);
     _ebo = new yuanGL::ElementBuffer(indices, 6);
 
-    {
-        yuanGL::VertexAttribution vertexAttribution({
-            yuanGL::Vertex(2,4,0),
-            yuanGL::Vertex(2,4,2),
-            });
-
-        _vao->attach_buffer(_vbo, vertexAttribution);
-    }
+    _vao->attach_buffer(_vbo, { 2,2 });
 
     _vao->attach_element_buffer(_ebo);
 

@@ -20,5 +20,6 @@
 #include <unordered_map>
 #include <thread>
 #include <chrono>
+#include <numeric>
 
 #endif //PCH_H

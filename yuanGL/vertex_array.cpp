@@ -17,15 +17,6 @@ yuanGL::VertexArray::~VertexArray()
     GLCall(glDeleteVertexArrays(1, &_id));
 }
 
-void yuanGL::VertexArray::attach_buffer(const VertexBuffer& vb, const VertexAttribution& attribution)
-{
-    this->bind();
-    vb.bind();
-    attribution.enable();
-    this->unbind();
-    vb.unbind();
-}
-
 void yuanGL::VertexArray::attach_buffer(const VertexBuffer* vb, const VertexAttribution& attribution)
 {
     this->bind();
@@ -35,12 +26,19 @@ void yuanGL::VertexArray::attach_buffer(const VertexBuffer* vb, const VertexAttr
     vb->unbind();
 }
 
-void yuanGL::VertexArray::attach_element_buffer(const ElementBuffer& eb)
+void yuanGL::VertexArray::attach_buffer(const VertexBuffer* vb, const std::vector<int>& attribution)
 {
     this->bind();
-    eb.bind();
+    vb->bind();
+    int sum = std::accumulate(attribution.begin(), attribution.end(), 0);
+    int offset = 0;
+    for (int i = 0; i < attribution.size(); i++) {
+        GLCall(glEnableVertexAttribArray(i));
+        GLCall(glVertexAttribPointer(i, attribution[i], GL_FLOAT, GL_FALSE, sum * sizeof(float), (void*)(offset * sizeof(float))));
+        offset += attribution[i];
+    }
     this->unbind();
-    eb.unbind();
+    vb->unbind();
 }
 
 void yuanGL::VertexArray::attach_element_buffer(const ElementBuffer* eb)
