@@ -21,12 +21,12 @@ namespace yuanGL {
 		void set_uniform_mat4(const char* name, const float* value);
 		void set_uniform_mat4(const char* name, const Matrix& m);
 
-		int get_uniform_location(const char* name);
+		int get_uniform_location(const char* name) const;
 
 	private:
 		unsigned int _id;
 
-		std::unordered_map<std::string, int> _uniform_locations;
+		mutable std::unordered_map<std::string, int> _uniform_locations;
 	};
 
 }

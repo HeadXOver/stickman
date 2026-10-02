@@ -64,7 +64,7 @@ void yuanGL::Shader::set_uniform_mat4(const char* name, const Matrix& m)
 	GLCall(glUniformMatrix4fv(get_uniform_location(name), 1, GL_FALSE, m.data()));
 }
 
-int yuanGL::Shader::get_uniform_location(const char* name)
+int yuanGL::Shader::get_uniform_location(const char* name) const 
 {
 	const std::string name_str(name);
 	auto findLocation = _uniform_locations.find(name_str);
