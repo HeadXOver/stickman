@@ -6,7 +6,7 @@
 #include <vertex_attribution.h>
 #include <shader.h>
 #include <texture.h>
-#include <yuan_matrix.h>
+#include <matrix.h>
 
 #include <iostream>
 
@@ -59,8 +59,25 @@ void stickman::DemoWindow::inloop()
 
     howRed += diff;
 
+    int x = 0;
+    int y = 0;
+    constexpr int step = 5;
+    if (is_press('A')) {
+        x = -step;
+    }
+    if (is_press('d')) {
+        x = step;
+    }
+    if (is_press('w')) {
+        y = step;
+    }
+    if (is_press('s')) {
+        y = -step;
+    }
+    view_add_translate(x, y);
+
     _shader->set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
-    _shader->set_uniform_mat4("uMvp", matrix_p());
+    _shader->set_uniform_mat4("uMvp", matrix_pv());
 
     draw_triangles_by_elements(6);
 }

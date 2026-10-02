@@ -1,30 +1,27 @@
 #include "pch.h"
 #include "matrix.h"
 
-yuanGL::Matrix::Matrix() :
-	_type(MatrixType::Identity)
-{
-	_m = new glm::mat4(1.f);
-}
+#include "transformer.h"
 
-yuanGL::Matrix::Matrix(float s) :
-	_type((s == 1.f) ? MatrixType::Identity : MatrixType::Homo)
-{
-	_m = new glm::mat4(s);
-}
+yuanGL::Matrix::Matrix() : glm::mat4(1.f) {}
+yuanGL::Matrix::Matrix(float s) : glm::mat4(s) {}
+yuanGL::Matrix::Matrix(const glm::mat4& m) : glm::mat4(m) {}
 
-yuanGL::Matrix::Matrix(const glm::mat4& m) :
-	_type(MatrixType::None)
+yuanGL::Matrix::Matrix(const Transformer& t) :
+    glm::mat4(1.f)
 {
-	_m = new glm::mat4(m);
+	operator[](0)[0] = t.w();
+	operator[](1)[1] = t.h();
+	*this = glm::rotate(glm::mat4(1.0f), t.r(), glm::vec3(0.0f, 0.0f, 1.0f)) * (*this);
+	operator[](3)[0] = t.x();
+	operator[](3)[1] = t.y();
 }
 
 yuanGL::Matrix::Matrix(MatrixType type, float f1, float f2, float f3, float f4)
 {
 	switch (type) {
 	case MatrixType::Ortho:
-		*_m = glm::ortho(f1, f2, f3, f4, -1.f, 1.f);
-		_type = MatrixType::Ortho;
+		*this = glm::ortho(f1, f2, f3, f4, -1.f, 1.f);
 		break;
 	default:
 		std::cout << "Error: MatrixType not supported" << std::endl;
@@ -36,8 +33,7 @@ yuanGL::Matrix::Matrix(MatrixType type, float f1, float f2, float f3, float f4, 
 {
 	switch (type) {
 	case MatrixType::Ortho:
-		*_m = glm::ortho(f1, f2, f3, f4, f5, f6);
-		_type = MatrixType::Ortho;
+		*this = glm::ortho(f1, f2, f3, f4, f5, f6);
 		break;
 	default:
 		std::cout << "Error: MatrixType not supported" << std::endl;
@@ -45,17 +41,52 @@ yuanGL::Matrix::Matrix(MatrixType type, float f1, float f2, float f3, float f4, 
 	}
 }
 
-yuanGL::Matrix::~Matrix()
+yuanGL::Matrix::Matrix(MatrixType type, float f1, float f2) :
+    glm::mat4(1.f)
 {
-	delete _m;
+	switch (type) {
+	case MatrixType::Scale:
+		(*this)[0][0] = f1;
+		(*this)[1][1] = f2;
+		break;
+	default:
+		std::cout << "Error: MatrixType not supported" << std::endl;
+		__debugbreak();
+	}
+}
+
+yuanGL::Matrix::Matrix(MatrixType type, float f1) :
+	glm::mat4(1.f)
+{
+	switch (type) {
+	case MatrixType::Scale:
+		operator[](0)[0] = f1;
+		operator[](1)[1] = f1;
+		break;
+	default:
+		std::cout << "Error: MatrixType not supported" << std::endl;
+		__debugbreak();
+	}
 }
 
 void yuanGL::Matrix::set_to_orth(float left, float right, float bottom, float top)
 {
-	*_m = glm::ortho(left, right, bottom, top, -1.f, 1.f);
-	_type = MatrixType::Ortho;
+	*this = glm::ortho(left, right, bottom, top, -1.f, 1.f);
 }
 
-const float* yuanGL::Matrix::data() const noexcept {
-	return &(*_m)[0][0];
+void yuanGL::Matrix::add_translate(float x, float y)
+{
+	operator[](3)[0] += x;
+	operator[](3)[1] += y;
+}
+
+void yuanGL::Matrix::set_translate(float x, float y)
+{
+	operator[](3)[0] = x;
+	operator[](3)[1] = y;
+}
+
+const float* yuanGL::Matrix::data() const noexcept 
+{
+	return &operator[](0)[0];
 }

@@ -6,6 +6,7 @@ namespace yuanGL {
 
 	class YuanWindow;
 	class Matrix;
+	class Transformer;
 
 	using ResizeFunc = void (YuanWindow::*)(int, int);
 
@@ -33,6 +34,11 @@ namespace yuanGL {
 		void start_loop();
 		void start_loop_fps(int fps);
 
+		void view_add_translate(float x, float y);
+		void view_set_position(float x, float y);
+		void view_set_scale(float x);
+		void view_add_scale(float x);
+
 		void maximize();
 		void swap_buffers() const;
 		void print_gl_version() const;
@@ -48,7 +54,10 @@ namespace yuanGL {
 		bool should_close() const;
 		bool operator!() const;
 
+		bool is_press(char key) const;
+
 		const Matrix& matrix_p() const;
+		const Matrix& matrix_pv() const;
 
 	protected:
 
@@ -61,11 +70,18 @@ namespace yuanGL {
 
 		void init_window_glew();
 		void resize_update_projection(int width, int height);
+		void update_pv_matrix();
+
+		void init();
 
 	private:
 		GLFWwindow* _window{ nullptr };
 
 		Matrix* _projection{ nullptr };
+		Matrix* _view{ nullptr };
+		Matrix* _matrix_pv{ nullptr };
+
+		Transformer* _view_transformer{ nullptr };
 
 		float _center_square{ 1000.0f };
 

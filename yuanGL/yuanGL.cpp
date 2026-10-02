@@ -76,3 +76,78 @@ unsigned int yuanGL::compileShader(unsigned int type, const std::string& src)
 
     return id;
 }
+
+int yuanGL::char_to_glfw_key(char c)
+{
+    switch (c) {
+    case ' ':
+        return GLFW_KEY_SPACE;
+    case ',':
+        return GLFW_KEY_COMMA;
+    case '.':
+        return GLFW_KEY_PERIOD;
+        case '/':
+        return GLFW_KEY_SLASH;
+    case ';':
+        return GLFW_KEY_SEMICOLON;
+    case '\'':
+        return GLFW_KEY_APOSTROPHE;
+    case '[':
+        return GLFW_KEY_LEFT_BRACKET;
+    case ']':
+        return GLFW_KEY_RIGHT_BRACKET;
+    case '\\':
+        return GLFW_KEY_BACKSLASH;
+    case '-':
+        return GLFW_KEY_MINUS;
+    case '=':
+        return GLFW_KEY_EQUAL;
+    case '`':
+        return GLFW_KEY_GRAVE_ACCENT;
+    default:
+        char upper = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+
+        if (upper < 'A' || upper > 'Z')
+            return GLFW_KEY_UNKNOWN;
+
+        return GLFW_KEY_A + (upper - 'A');
+    }
+
+    return GLFW_KEY_UNKNOWN;
+}
+
+constexpr int yuanGL::char_to_glfw_key_constexpr(char c)
+{
+    switch (c) {
+    case ' ':
+        return GLFW_KEY_SPACE;
+    case ',':
+        return GLFW_KEY_COMMA;
+    case '.':
+        return GLFW_KEY_PERIOD;
+    case '/':
+        return GLFW_KEY_SLASH;
+    case ';':
+        return GLFW_KEY_SEMICOLON;
+    case '\'':
+        return GLFW_KEY_APOSTROPHE;
+    case '[':
+        return GLFW_KEY_LEFT_BRACKET;
+    case ']':
+        return GLFW_KEY_RIGHT_BRACKET;
+    case '\\':
+        return GLFW_KEY_BACKSLASH;
+    case '-':
+        return GLFW_KEY_MINUS;
+    case '=':
+        return GLFW_KEY_EQUAL;
+    case '`':
+        return GLFW_KEY_GRAVE_ACCENT;
+    default:
+        if(c >= 'A' && c <= 'Z') return GLFW_KEY_A + (c - 'A');
+
+        if (c >= 'a' && c <= 'z') return GLFW_KEY_A + (c - 'a');
+    }
+
+    return GLFW_KEY_UNKNOWN;
+}

@@ -3,6 +3,8 @@
 #include "yuan_window.h"
 #include "gl_call.h"
 #include "matrix.h"
+#include "yuanGL.h"
+#include "transformer.h"
 
 namespace {
 
@@ -27,9 +29,9 @@ namespace yuanGL {
 
 bool yuanGL::YuanWindow::_is_glfw_init = false;
 
-yuanGL::YuanWindow::YuanWindow(const char* title) :
-	_projection(new Matrix())
+yuanGL::YuanWindow::YuanWindow(const char* title)
 {
+	init();
 	before_create();
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	_window = glfwCreateWindow(1080, 720, title, NULL, NULL);
@@ -38,18 +40,18 @@ yuanGL::YuanWindow::YuanWindow(const char* title) :
 	glfwShowWindow(_window);
 }
 
-yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title) :
-	_projection(new Matrix())
+yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title)
 {
+	init();
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, NULL);
 	init_window_glew();
 	resize_update_projection(width, height);
 }
 
-yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share) :
-	_projection(new Matrix())
+yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwindow* share)
 {
+	init();
 	before_create();
 	_window = glfwCreateWindow(width, height, title, NULL, share);
 	init_window_glew();
@@ -59,8 +61,9 @@ yuanGL::YuanWindow::YuanWindow(int width, int height, const char* title, GLFWwin
 yuanGL::YuanWindow::~YuanWindow()
 {
 	glfwDestroyWindow(_window);
-	delete _projection;
 	hashWindow.erase(_window);
+	delete _projection;
+	delete _view;
 }
 
 void yuanGL::YuanWindow::terminate()
@@ -125,6 +128,47 @@ void yuanGL::YuanWindow::start_loop_fps(int fps)
 	}
 }
 
+void yuanGL::YuanWindow::view_add_translate(float x, float y)
+{
+	_view->add_translate(-x, -y);
+	_view_transformer->add_translate(-x, -y);
+	update_pv_matrix();
+}
+
+void yuanGL::YuanWindow::view_set_position(float x, float y)
+{
+	_view->set_translate(-x, -y);
+	_view_transformer->set_translate(-x, -y);
+	update_pv_matrix();
+}
+
+void yuanGL::YuanWindow::view_set_scale(float x)
+{
+	_view_transformer->set_scale(x);
+	*_view = *_view_transformer;
+	update_pv_matrix();
+}
+
+void yuanGL::YuanWindow::view_add_scale(float x)
+{
+	_view_transformer->add_scale(x);
+	*_view = *_view_transformer;
+	update_pv_matrix();
+}
+
+void yuanGL::YuanWindow::update_pv_matrix()
+{
+	(*_matrix_pv) = (*_projection) * (*_view);
+}
+
+void yuanGL::YuanWindow::init()
+{
+	_projection = new Matrix();
+	_view = new Matrix();
+	_matrix_pv = new Matrix();
+	_view_transformer = new Transformer();
+}
+
 void yuanGL::YuanWindow::maximize()
 {
 	glfwMaximizeWindow(_window);
@@ -181,9 +225,30 @@ bool yuanGL::YuanWindow::operator!() const {
 	return !_window;
 }
 
+bool yuanGL::YuanWindow::is_press(char key) const
+{
+	// 转成大写，兼容 'a'/'A' 两种写法
+	char upper = static_cast<char>(std::toupper(static_cast<unsigned char>(key)));
+
+	if (upper < 'A' || upper > 'Z') {
+		int glfw_key = char_to_glfw_key(key);
+		return glfwGetKey(_window, glfw_key) == GLFW_PRESS;
+	}
+
+
+	int glfw_key = GLFW_KEY_A + (upper - 'A');
+
+	return glfwGetKey(_window, glfw_key) == GLFW_PRESS;
+}
+
 const yuanGL::Matrix& yuanGL::YuanWindow::matrix_p() const
 {
 	return *_projection;
+}
+
+const yuanGL::Matrix& yuanGL::YuanWindow::matrix_pv() const
+{
+	return *_matrix_pv;
 }
 
 void yuanGL::YuanWindow::before_create()
@@ -238,4 +303,6 @@ void yuanGL::YuanWindow::resize_update_projection(int width, int height)
 	else {
 		_projection->set_to_orth(0.f, _center_square, 0.f, _center_square);
 	}
+
+	update_pv_matrix();
 }
