@@ -144,13 +144,17 @@ void yuanGL::YuanWindow::view_set_position(float x, float y)
 
 void yuanGL::YuanWindow::view_set_scale(float x)
 {
-	_view_transformer->set_scale(x);
-	*_view = *_view_transformer;
-	update_pv_matrix();
+	float currentS = _view_transformer->w();
+	view_add_scale(x / currentS);
 }
 
 void yuanGL::YuanWindow::view_add_scale(float x)
 {
+	const float oneMointX = 1.f - x;
+	const float s = _center_square * _view_transformer->w() * 0.5f;
+	float sx = (_view_transformer->x() + s) * oneMointX;
+	float sy = (_view_transformer->y() + s) * oneMointX;
+	_view_transformer->set_translate(sx, sy);
 	_view_transformer->add_scale(x);
 	*_view = *_view_transformer;
 	update_pv_matrix();

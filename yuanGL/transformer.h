@@ -26,6 +26,13 @@ namespace yuanGL {
             _h *= s;
         }
 
+        void add_scale_after_translate(float s) noexcept {
+            _w *= s;
+            _h *= s;
+            _x *= s;
+            _y *= s;
+        }
+
         void set_scale(float s) noexcept {
             _w = s;
             _h = s;

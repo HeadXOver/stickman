@@ -76,6 +76,16 @@ void stickman::DemoWindow::inloop()
     }
     view_add_translate(x, y);
 
+    if (is_press(',')) {
+        view_add_scale(0.9f);
+    }
+    if (is_press('.')) {
+        view_add_scale(1.1f);
+    }
+    if (is_press('r')) {
+        view_set_scale(1.f);
+    }
+
     _shader->set_uniform_3f("uColor", howRed, 0.3f, 0.8f);
     _shader->set_uniform_mat4("uMvp", matrix_pv());
 
