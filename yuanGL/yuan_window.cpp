@@ -171,6 +171,7 @@ void yuanGL::YuanWindow::update_pv_matrix()
 
 void yuanGL::YuanWindow::regist_resize_shader(Shader& shader)
 {
+	shader.set_uniform_mat4("uMvp", *_matrix_pv);
 	_resize_shaders.push_back(&shader);
 }
 

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <world.h>
+#include <scene.h>
 
 #include <vertex_buffer.h>
 #include <element_buffer.h>
@@ -12,6 +13,7 @@ stickman::MainWindow::MainWindow() :
 	_rect_shader("pos2_color4_simple.shader"),
 	_world(new yuanEngine::World(1000.f, 1000.f))
 {
+	yuanEngine::Scene::get_instance().set_world(_world);
 	regist_resize_shader(_rect_shader);
 
 	std::vector<float> rectbuffer;
@@ -26,8 +28,6 @@ stickman::MainWindow::MainWindow() :
 
 	_rects_vao.attach_buffer(_rects_vbo, { 2, 4 });
 	_rects_vao.attach_element_buffer(_rects_ebo);
-
-	_rect_shader.set_uniform_mat4("uMvp", matrix_pv());
 }
 
 stickman::MainWindow::~MainWindow()
