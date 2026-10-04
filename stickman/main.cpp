@@ -4,13 +4,13 @@
 #include <iostream>
 #include <string>
 
-#include "demo_window.h"
+#include "main_window.h"
 
 int main(void)
 {
     {
-        stickman::DemoWindow window("stickman");
-        window.set_clear_color(0.f, 0.3f, 0.8f, 1.0f);
+        stickman::MainWindow window;
+        window.set_clear_color(0.0f, 0.0f, 0.0f, 1.0f);
         window.start_loop_fps(120);
     }
 

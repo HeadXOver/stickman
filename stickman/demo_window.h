@@ -12,6 +12,12 @@ namespace yuanGL {
 
 }
 
+namespace yuanEngine{
+
+    class World;
+
+}
+
 namespace stickman {
 
     class DemoWindow final : public yuanGL::YuanWindow {
@@ -37,6 +43,8 @@ namespace stickman {
         yuanGL::Shader* _shader;
 
         yuanGL::Texture* _texture;
+
+        yuanEngine::World* _world;
     };
 
 }

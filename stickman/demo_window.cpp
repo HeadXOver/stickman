@@ -7,6 +7,7 @@
 #include <shader.h>
 #include <texture.h>
 #include <matrix.h>
+#include <world.h>
 
 #include <iostream>
 
@@ -30,13 +31,15 @@ namespace {
 }
 
 stickman::DemoWindow::DemoWindow(const char* title) :
-    yuanGL::YuanWindow(title)
+    yuanGL::YuanWindow(title),
+    _world(new yuanEngine::World(1000.f, 1000.f))
 {
     before_draw();
 }
 
 stickman::DemoWindow::DemoWindow(int width, int height, const char* title) :
-    yuanGL::YuanWindow(width, height, title)
+    yuanGL::YuanWindow(width, height, title),
+    _world(new yuanEngine::World(width, height))
 {
     before_draw();
 }
@@ -59,9 +62,9 @@ void stickman::DemoWindow::inloop()
 
     howRed += diff;
 
-    int x = 0;
-    int y = 0;
-    constexpr int step = 5;
+    float x = 0;
+    float y = 0;
+    constexpr float step = 5;
     if (is_press('A')) {
         x = -step;
     }
