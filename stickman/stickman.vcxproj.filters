@@ -40,5 +40,8 @@
     <None Include="shader.shader">
       <Filter>shader</Filter>
     </None>
+    <None Include="pos2_color4_simple.shader">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

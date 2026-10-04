@@ -14,6 +14,7 @@
 #include <iostream>
 #include <initializer_list>
 #include <vector>
+#include <list>
 #include <string>
 #include <fstream>
 #include <sstream>

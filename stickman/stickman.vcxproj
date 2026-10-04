@@ -138,6 +138,7 @@
     <ClInclude Include="main_window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="pos2_color4_simple.shader" />
     <None Include="shader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

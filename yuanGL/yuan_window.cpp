@@ -5,6 +5,7 @@
 #include "matrix.h"
 #include "yuanGL.h"
 #include "transformer.h"
+#include "shader.h"
 
 namespace {
 
@@ -20,8 +21,8 @@ namespace yuanGL {
 
 		auto findWindow = hashWindow.find(window);
 		if (findWindow != hashWindow.end()) {
-			findWindow->second->resize(width, height);
 			findWindow->second->resize_update_projection(width, height);
+			findWindow->second->resize(width, height);
 		}
 	}
 
@@ -163,6 +164,19 @@ void yuanGL::YuanWindow::view_add_scale(float x)
 void yuanGL::YuanWindow::update_pv_matrix()
 {
 	(*_matrix_pv) = (*_projection) * (*_view);
+	for (auto& shader : _resize_shaders) {
+		shader->set_uniform_mat4("uMvp", *_matrix_pv);
+	}
+}
+
+void yuanGL::YuanWindow::regist_resize_shader(Shader& shader)
+{
+	_resize_shaders.push_back(&shader);
+}
+
+void yuanGL::YuanWindow::unregist_resize_shader(Shader& shader)
+{
+	_resize_shaders.remove(&shader);
 }
 
 void yuanGL::YuanWindow::init()

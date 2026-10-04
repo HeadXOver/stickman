@@ -12,6 +12,8 @@ namespace yuanEngine {
 
 		World(float width, float height);
 
+		void get_rect_buffers(std::vector<float>& vertices, std::vector<unsigned int>& indices);
+
 	private:
 
 		float _width;

@@ -39,7 +39,7 @@ stickman::DemoWindow::DemoWindow(const char* title) :
 
 stickman::DemoWindow::DemoWindow(int width, int height, const char* title) :
     yuanGL::YuanWindow(width, height, title),
-    _world(new yuanEngine::World(width, height))
+    _world(new yuanEngine::World((float)width, (float)height))
 {
     before_draw();
 }

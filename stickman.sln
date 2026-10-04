@@ -5,6 +5,7 @@ VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stickman", "stickman\stickman.vcxproj", "{470B94E5-5CB2-4084-B58D-0251DA425416}"
 	ProjectSection(ProjectDependencies) = postProject
+		{6C160AC6-91D5-4FC2-B9AE-099068A3ACD6} = {6C160AC6-91D5-4FC2-B9AE-099068A3ACD6}
 		{FB21B3DC-60A8-4697-98AE-5C8ADCB63A97} = {FB21B3DC-60A8-4697-98AE-5C8ADCB63A97}
 	EndProjectSection
 EndProject

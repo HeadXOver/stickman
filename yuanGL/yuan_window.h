@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <list>
+
 struct GLFWwindow;
 
 namespace yuanGL {
@@ -7,6 +9,7 @@ namespace yuanGL {
 	class YuanWindow;
 	class Matrix;
 	class Transformer;
+	class Shader;
 
 	using ResizeFunc = void (YuanWindow::*)(int, int);
 
@@ -64,6 +67,9 @@ namespace yuanGL {
 		virtual void inloop() = 0;
 		virtual void resize(int width, int height) {}
 
+		void regist_resize_shader(Shader& shader);
+		void unregist_resize_shader(Shader& shader);
+
 	private:
 
 		static void before_create();
@@ -86,6 +92,8 @@ namespace yuanGL {
 		float _center_square{ 1000.0f };
 
 		static bool _is_glfw_init;
+
+		std::list<Shader*> _resize_shaders;
 	};
 
 }
