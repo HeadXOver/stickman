@@ -16,6 +16,7 @@ namespace yuanGL {
 		void bind();
 		void unbind();
 
+		void set_uniform_2f(const char* name, float v1, float v2);
 		void set_uniform_3f(const char* name, float v1, float v2, float v3);
 		void set_uniform_i(const char* name, int v);
 		void set_uniform_mat4(const char* name, const float* value);

@@ -24,7 +24,7 @@ namespace yuanEngine {
 
 	public:
 
-		float _gravity = 0.6f;
+		float _gravity = -980.f;
 
 	private:
 

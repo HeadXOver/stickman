@@ -53,6 +53,7 @@ namespace yuanGL {
 
 		static void draw_triangles_by_elements(const void* data, int count);
 		static void draw_triangles_by_elements(int count);
+		static void draw_rects_by_buffer(int count);
 
 		bool should_close() const;
 		bool operator!() const;

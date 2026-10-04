@@ -89,6 +89,26 @@ void yuanEngine::Character::update()
     }
 }
 
+void yuanEngine::Character::move_left()
+{
+    if (!_is_grounded) return;
+    _vel_x = -_speed;
+}
+
+void yuanEngine::Character::move_right()
+{
+    if (!_is_grounded) return;
+    _vel_x = _speed;
+}
+
+void yuanEngine::Character::jump()
+{
+    if (_is_grounded) {
+        _vel_y = _jump_force;
+        _is_grounded = false;
+    }
+}
+
 void yuanEngine::Character::record_last_position()
 {
     _pre_x = _box._x;

@@ -40,6 +40,12 @@ void yuanGL::Shader::unbind()
 	GLCall(glUseProgram(0));
 }
 
+void yuanGL::Shader::set_uniform_2f(const char* name, float v1, float v2)
+{
+	bind();
+	GLCall(glUniform2f(get_uniform_location(name), v1, v2));
+}
+
 void yuanGL::Shader::set_uniform_3f(const char* name, float v1, float v2, float v3)
 {
 	bind();

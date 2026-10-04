@@ -12,6 +12,15 @@ namespace yuanEngine {
 
         void update();
 
+        void move_left();
+        void move_right();
+        void jump();
+
+        Rect get_box() const noexcept { return _box; }
+
+        float x() const noexcept { return _box._x; }
+        float y() const noexcept { return _box._y; }
+
     private:
 
         void record_last_position();
@@ -26,11 +35,13 @@ namespace yuanEngine {
         float _pre_x;
         float _pre_y;
 
+        float _speed = 700.f;
+
         float _friction = 0.85f;
 
         bool _is_grounded = false;
 
-        float _jump_force = 12.f;
+        float _jump_force = 300.f;
     };
 
 }

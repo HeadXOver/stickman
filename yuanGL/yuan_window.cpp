@@ -235,6 +235,11 @@ void yuanGL::YuanWindow::draw_triangles_by_elements(int count)
 	GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0));
 }
 
+void yuanGL::YuanWindow::draw_rects_by_buffer(int count)
+{
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4 * count);
+}
+
 bool yuanGL::YuanWindow::should_close() const
 {
 	return glfwWindowShouldClose(_window);
